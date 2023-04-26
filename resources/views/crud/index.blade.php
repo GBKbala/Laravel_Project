@@ -7,7 +7,15 @@
     <title>Laravel Crud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+
+
+
+
+
 </head>
 <body>
     <div class="container">
@@ -16,9 +24,14 @@
         </div>
 
         <div>
-       @if($messege = Session::get('success'))
+       {{-- @if($messege = Session::get('success'))
             <div class="alert alert-success">{{$messege}}</div>
-       @endif
+       @endif --}}
+       {{-- @if (Session::has('success'))
+                Toastify({ text: "jii", duration: 3000,
+                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+                }).showToast();
+        @endif --}}
         </div>
         <table class="table table-bordered table-sm">
             <thead>
@@ -42,7 +55,7 @@
                         <td>{{$student->languages}}</td>
                         <td><img src="{{asset($student->image)}}" alt="" height="150" width="150"></td>
                         <td>
-                            <div class=" d-flex align-items-center"> 
+                            <div class=" d-flex align-items-center">
                                 <div>
                                     <a href="{{route('crud.edit',$student->id)}}" class="btn btn-primary btn-sm">Edit</i></a>
                                     <!-- <a href=""><i class="fa-solid fa-trash"></i></a> -->
@@ -54,14 +67,14 @@
                                     <button type="submit" class="btn btn-primary btn-sm">Delete</button>
                                     </form>
                                 </div>
-                                
+
                             </div>
-                           
+
                         </td>
                     </tr>
                 @endforeach
             </tbody>
-            
+
 
         </table>
     </div>
@@ -69,10 +82,27 @@
 
 
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-<script src="{{asset('js/script.js')}}"></script>
 
+
+<script src="{{asset('assets/js/script.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+<script>
+
+    $(document).ready(function(){
+        @if(Session::has('success'))
+            //     Toastify({ text: "jii", duration: 3000,
+            //     style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+            // }).showToast();
+            toastr.success("{{ Session::get('success') }}");
+        @endif
+    });
+
+</script>
 </body>
 </html>
+

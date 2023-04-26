@@ -10,16 +10,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
+
     <main>
         <section>
-            <form id="student" data-action="{{route('ajax.store')}}"  method="POST" enctype="multipart/form-data">
+            <form id="student_edit" data-action=""  method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('POST')
+                @method('PUT')
                 <div class="container mt-5">
                     <div class="mb-3 row">
                         <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
-                          <input type="text" name="name" class="form-control name" id="staticEmail" value="">
+                          <input type="text" name="name" value="{{$ajax_edit->name}}" class="form-control name" id="staticEmail" value="">
                           <span class="name_error text-danger"></span>
                         </div>
                     </div>
@@ -27,7 +28,7 @@
                     <div class="mb-3 row">
                         <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                          <input type="text" name="email" class="form-control email" id="staticEmail">
+                          <input type="text" value="{{$ajax_edit->email}}" name="email" class="form-control email" id="staticEmail">
                           <span class="email_error text-danger"></span>
                         </div>
                     </div>
@@ -35,7 +36,7 @@
                     <div class="mb-3 row">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Phone</label>
                         <div class="col-sm-10">
-                          <input type="number" name="phone" class="form-control phone" id="inputPassword">
+                          <input type="number" value="{{$ajax_edit->phone}}" name="phone" class="form-control phone" id="inputPassword">
                           <span class="phone_error text-danger"></span>
                         </div>
                     </div>
@@ -46,8 +47,8 @@
 
                           <select name="gender" id="" class="form-control gender">
                                 <option value="">-select-</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="male" {{($ajax_edit->gender == 'male') ? 'selected':''}}>Male</option>
+                                <option value="female" {{($ajax_edit->gender == 'female') ? 'selected':''}}>Female</option>
                           </select>
                           <span class="gender_error text-danger"></span>
                         </div>
@@ -81,7 +82,8 @@
                     <div class="mb-3 row">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Image</label>
                         <div class="col-sm-10">
-                          <input type="file" name="image" class="form-control image" id="inputPassword">
+                            {{-- <img src="{{asset('assets/'.$ajax_edit->image)}}" alt=""> --}}
+                          <input type="file" name="image" class="form-control image" id="">
                           <span class="image_error text-danger"></span>
                         </div>
                     </div>
