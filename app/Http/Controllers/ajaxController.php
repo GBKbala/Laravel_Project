@@ -38,7 +38,7 @@ class ajaxController extends Controller
      */
     public function store(Request $request)
     {
-
+        // dd($request->name);
         // $validated = $request->validate([
         //     'name' => 'required',
         //     'email' => 'required',
@@ -49,16 +49,19 @@ class ajaxController extends Controller
 
         // ]);
 
-        dd($request);
         $data=[];
-        $data =$request->all();
-        // dd($data['languages']);
-        // $data['languages'] = implode(',',$request->languages);
+        $data = $request->all();
 
 
+        // if ($files = $request->file('image')){
+        //     $extension = $files->getClientOriginalExtension();
+        //     $file_name = time().'.'.$extension;
+        //     $files->move(public_path('assets/images/',$file_name));
+        // }
+
+        $data['languages'] = implode(',',$request->languages);
         $image_name = time().'.'.$request->image->extension();
-        $request->image->move(public_path('assets/images',$image_name));
-
+        $data['image']->move(public_path('images'),$image_name);
         $data['image'] = 'images/'.$image_name;
 
 
@@ -89,7 +92,7 @@ class ajaxController extends Controller
     public function edit($id)
     {
         $ajax_edit = Ajaxcrud::find($id);
-        // dd($ajax_edit);
+        $ajax_edit->languages = explode(',',$ajax_edit->languages);
         return view('ajax.edit',compact('ajax_edit'));
     }
 
@@ -102,7 +105,37 @@ class ajaxController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->image);
+        $update_data = [];
+        $update_data = $request->all();
+    //    dd($update_data['image']);
+
+        $ajax_update = Ajaxcrud::find($id);
+
+        $existing_image = $ajax_update->image;
+
+        if(!empty($request->image)){
+
+            if(File::exists(public_path($existing_image))){
+                File::delete(public_path($existing_image));
+            }
+
+            $image_name = time().'.'.$request->image->extension();
+            // dd($image_name);
+            $request->image->move(public_path('images'),$image_name);
+            $update_data['image'] ='images/'.$image_name;
+            $update_data['languages'] = implode(',',$update_data['languages']);
+
+            $ajax_update->update($update_data);
+
+        }else{
+            $update_data['languages'] = implode(',',$update_data['languages']);
+            $ajax_update->update($update_data);
+        }
+
+        Session::flash('success','Data Updated');
+
+        return response()->json(['success'=>true]);
     }
 
     /**
@@ -118,8 +151,8 @@ class ajaxController extends Controller
         $ajax_delete->delete();
 
         $existing_image = $ajax_delete->image;
-        if(File::exists(public_path('assets/'.$existing_image))){
-            File::delete(public_path('assets/'.$existing_image));
+        if(File::exists(public_path($existing_image))){
+            File::delete(public_path($existing_image));
         }
 
         Session::flash('success','Data Deleted');

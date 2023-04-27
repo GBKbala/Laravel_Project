@@ -46,10 +46,9 @@ class crudController extends Controller
             'languages' => 'required',
             'image' => 'required'
         ]);
-        // echo '<pre>';
-        // var_dump($validated);
-
+        // dd($request->image);
         $img_name = time().'.'.$request->image->extension();
+        // dd($img_name);
         $request->image->move(public_path('images'),$img_name);
 
         $validated['image'] = 'images/'.$img_name;

@@ -142,6 +142,7 @@ $('#student').submit(function(e){
 
     if(name="" || email=="" || phone=="" || gender=="" || image=="" || file_ext==false || email_format==false){
         // alert('not submit')
+
         return false;
     }
     else{
@@ -149,6 +150,9 @@ $('#student').submit(function(e){
         return true;
 
     }
+
+
+
 
 });
 
@@ -159,22 +163,27 @@ $('#student').submit(function(e){
 $('#student').submit(function(e){
     e.preventDefault();
     let url = $('#student').attr('data-action');
-    let form_data = new FormData(this);
+    let form_data = new FormData($('#student')[0]);
+
     let redirect = 'http://localhost/balakannan/laravel_crud/public/ajax';
 
-    let languages = [];
+    console.log(form_data['name']);
+    // console.log(form_data.name);
+
+    var languages = [];
     $('input:checkbox[name=languages]:checked').each(function(){
        languages.push($(this).val());
     })
+    // alert(languages);
     // form_data['languages'] = languages;
-    // alert(form_data['languages']);
-    console.log(form_data.name);
+    // alert(form_data);
+
 
     $.ajax({
         url:url,
         method:'POST',
         data:form_data,
-        dataType:"JSON",
+        // dataType:"JSON",
         contentType:false,
         processData:false,
         cache:false,
@@ -189,25 +198,55 @@ $('#student').submit(function(e){
 
 });
 
-// $('.edit').click(function(e){
-//     e.preventDefault();
-//     let url = $('.edit').attr('data-action');
-//     let id = $(this).data('id');
-//     // alert(id);
 
-//     $.ajax({
-//         url:url,
-//         method:'GET',
-//         data:{id:id},
-//         success:function(response){
+$('#student_edit').submit(function(e){
+    e.preventDefault();
 
-//         }
+    let url = $('#student_edit').attr('data-action');
+    let update_data = new FormData($('#student_edit')[0]);
 
-//     });
+    let redirect = 'http://localhost/balakannan/laravel_crud/public/ajax';
+
+    let name = $('.name').val();
+    let email = $('.email').val();
+    let phone = $('.phone').val();
+    let gender = $('.gender').val();
+    let id = $('#id').val();
+
+    var languages = [];
+        $('input:checkbox[name=languages]:checked').each(function(){
+            languages.push($(this).val());
+        })
+
+    let image = $('#edit_image')[0].file;
+    // let image =  $('input:file[name=image]').val();
+    // alert(image);
 
 
-// });
+    // console.log({
+    //     name: name,
+    //     email: email
+    // })
+    $.ajax({
+        url:url,
+        method:"put",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data:{
+            id: id,
+            name: name,
+            email: email,
+            phone: phone,
+            gender : gender,
+            languages : languages,
+            image : image
+        },
+        cache:false,
+        success:function(response){
+            if(response.success=true){
+                window.location.href=redirect;
+            }
+        }
 
+    });
 
-
-
+});
