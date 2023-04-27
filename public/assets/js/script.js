@@ -142,7 +142,7 @@ $('#student').submit(function(e){
 
     if(name="" || email=="" || phone=="" || gender=="" || image=="" || file_ext==false || email_format==false){
         // alert('not submit')
-
+        // e.preventDefault();
         return false;
     }
     else{
